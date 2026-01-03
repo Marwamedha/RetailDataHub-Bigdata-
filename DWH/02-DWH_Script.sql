@@ -1,5 +1,5 @@
 -- =====================================================
--- DWH Layer - Qcompany Data Warehouse
+-- DWH Layer - Retail DatatHub Data Warehouse
 -- Author  : Marwa Medhat
 -- Purpose : Create Dimension & Fact Tables for Batch + Streaming
 -- Storage : ORC
@@ -12,8 +12,8 @@ SET hive.exec.dynamic.partition.mode = nonstrict;
 -- =====================================================
 -- Create Database
 -- =====================================================
-CREATE DATABASE IF NOT EXISTS qcompany;
-USE qcompany;
+CREATE DATABASE IF NOT EXISTS companyabc;
+USE companyabc;
 
 -- =====================================================
 -- ================= DIMENSION TABLES ==================
