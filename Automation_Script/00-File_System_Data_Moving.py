@@ -35,7 +35,7 @@ def move_one_subfolder_per_hour(source_folder, target_folder, delay_seconds=3600
 if __name__ == "__main__":
 
     #  PROJECT PATHS
-    PROJECT_ROOT = r"D:\Retail-Big-Data-Project"
+    PROJECT_ROOT = r"D:\RetailDataHub-Bigdata"
 
     SOURCE_FOLDER = os.path.join(PROJECT_ROOT, "data", "source")
     TARGET_FOLDER = os.path.join(PROJECT_ROOT, "data", "landing")
