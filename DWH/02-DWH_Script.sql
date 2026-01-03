@@ -1,47 +1,27 @@
-set hive.exec.dynamic.partition=true;
-SET hive.exec.dynamic.partition.mode=nonstrict;
+-- =====================================================
+-- DWH Layer - Qcompany Data Warehouse
+-- Author  : Marwa Medhat
+-- Purpose : Create Dimension & Fact Tables for Batch + Streaming
+-- Storage : ORC
+-- =====================================================
 
-CREATE DATABASE IF NOT EXISTS Qcompany;
-USE Qcompany;
+-- Enable Dynamic Partitioning
+SET hive.exec.dynamic.partition = true;
+SET hive.exec.dynamic.partition.mode = nonstrict;
 
--- Customer Dimension Table
-CREATE EXTERNAL TABLE IF NOT EXISTS customer_dim (
-    customer_key INT,
-    customer_id INT,
-    customer_full_name STRING,
-    email STRING
-)
-STORED AS ORC;
+-- =====================================================
+-- Create Database
+-- =====================================================
+CREATE DATABASE IF NOT EXISTS qcompany;
+USE qcompany;
 
--- Product Dimension Table
-CREATE EXTERNAL TABLE IF NOT EXISTS product_dim (
-    product_key INT,
-    product_id INT,
-    name STRING,
-    category STRING
-)
-STORED AS ORC;
+-- =====================================================
+-- ================= DIMENSION TABLES ==================
+-- =====================================================
 
--- Branch Dimension Table
-CREATE EXTERNAL TABLE IF NOT EXISTS branch_dim (
-    branch_key INT,
-    branch_id INT,
-    location STRING,
-    established_date_id INT,
-    class STRING
-)
-STORED AS ORC;
-
--- Sales Agent Dimension Table
-CREATE EXTERNAL TABLE IF NOT EXISTS sales_agent_dim (
-    agent_key INT,
-    agent_id INT,
-    name STRING,
-    hire_date_id INT
-)
-STORED AS ORC;
-
--- Date Dimension Table
+-- -----------------------
+-- Date Dimension
+-- -----------------------
 CREATE EXTERNAL TABLE IF NOT EXISTS date_dim (
     date_key INT,
     full_date STRING,
@@ -52,47 +32,110 @@ CREATE EXTERNAL TABLE IF NOT EXISTS date_dim (
     day_name STRING,
     day_of_month INT
 )
-STORED AS ORC;
+STORED AS ORC
+LOCATION '/project/dwh/date_dim';
 
--- Create external table for online sales
-CREATE EXTERNAL TABLE online_sales_fact (
-  transaction_id String,
-  customer_key INT,
-  product_key INT,
-  units INT,
-  unit_price DECIMAL(10,2),
-  discount DECIMAL(10,2),
-  total_price DECIMAL(10,2),
-  payment_method STRING,
-  street STRING,
-  city STRING,
-  state STRING,
-  postal_code STRING
+-- -----------------------
+-- Customer Dimension
+-- -----------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS customer_dim (
+    customer_key BIGINT,
+    customer_id INT,
+    customer_full_name STRING,
+    email STRING
+)
+STORED AS ORC
+LOCATION '/project/dwh/customer_dim';
+
+-- -----------------------
+-- Product Dimension
+-- -----------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS product_dim (
+    product_key BIGINT,
+    product_id INT,
+    name STRING,
+    category STRING
+)
+STORED AS ORC
+LOCATION '/project/dwh/product_dim';
+
+-- -----------------------
+-- Branch Dimension
+-- -----------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS branch_dim (
+    branch_key BIGINT,
+    branch_id INT,
+    location STRING,
+    established_date_id INT,
+    class STRING
+)
+STORED AS ORC
+LOCATION '/project/dwh/branch_dim';
+
+-- -----------------------
+-- Sales Agent Dimension
+-- -----------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS sales_agent_dim (
+    agent_key BIGINT,
+    agent_id INT,
+    name STRING,
+    hire_date_id INT
+)
+STORED AS ORC
+LOCATION '/project/dwh/sales_agent_dim';
+
+-- =====================================================
+-- ================= FACT TABLES =======================
+-- =====================================================
+
+-- -----------------------
+-- Online Sales Fact
+-- -----------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS online_sales_fact (
+    transaction_id STRING,
+    customer_key BIGINT,
+    product_key BIGINT,
+    units INT,
+    unit_price DECIMAL(18,2),
+    discount DECIMAL(18,2),
+    total_price DECIMAL(18,2),
+    payment_method STRING,
+    street STRING,
+    city STRING,
+    state STRING,
+    postal_code STRING
 )
 PARTITIONED BY (transaction_date_key INT)
-STORED AS ORC;
+STORED AS ORC
+LOCATION '/project/dwh/online_sales_fact';
 
--- Create external table for branch sales
-CREATE EXTERNAL TABLE branch_sales_fact (
-  transaction_id STRING,
-  customer_key INT,
-  branch_key INT,
-  sales_agent_key INT,
-  product_key INT,
-  units INT,
-  unit_price DECIMAL(10,2),
-  discount DECIMAL(10,2),
-  total_price DECIMAL(10,2),
-  payment_method STRING
+-- -----------------------
+-- Branch Sales Fact
+-- -----------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS branch_sales_fact (
+    transaction_id STRING,
+    customer_key BIGINT,
+    branch_key BIGINT,
+    sales_agent_key BIGINT,
+    product_key BIGINT,
+    units INT,
+    unit_price DECIMAL(18,2),
+    discount DECIMAL(18,2),
+    total_price DECIMAL(18,2),
+    payment_method STRING
 )
-PARTITIONED BY (transaction_date_key INT )
-STORED AS ORC;
+PARTITIONED BY (transaction_date_key INT)
+STORED AS ORC
+LOCATION '/project/dwh/branch_sales_fact';
 
+-- =====================================================
+-- ================= STREAMING TABLE ===================
+-- =====================================================
 
-
--- Streaming Table 
-
-CREATE EXTERNAL TABLE IF NOT EXISTS log_Events (
+-- -----------------------
+-- Log Events (Streaming / Lambda Layer)
+-- -----------------------
+CREATE EXTERNAL TABLE IF NOT EXISTS log_events (
     eventType STRING,
     customerId STRING,
     productId STRING,
@@ -110,3 +153,6 @@ FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
 LOCATION '/project/log_Events';
 
+-- =====================================================
+-- END OF SCRIPT
+-- =====================================================
