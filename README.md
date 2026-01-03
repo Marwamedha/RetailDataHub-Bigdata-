@@ -1,73 +1,68 @@
-#Data Platform 
-
-The Q Company data platform project aims to enhance data management capabilities by handling, processing, and analyzing large data volumes from retail operations. The platform integrates both batch and streaming data processes to support business intelligence, reporting, and advanced analytics.
-
+# RetailDataHub‑Bigdata
 ![Architecture](architecture.png)
 
-## Primary Objectives
-1. Develop a data ingestion pipeline for batch files and streaming data from Kafka.
-2. Create a scalable data storage solution using a data lake architecture.
-3. Implement data processing workflows for transforming raw data into structured formats.
-4. Establish a data warehouse using Hive tables for centralized business intelligence.
-5. Provide actionable insights and reports to business teams.
-6. Ensure data security, compliance, and performance optimization.
+A modern **Retail Data Platform** designed to ingest, process, store, and analyze large volumes of retail data through both **batch and streaming pipelines**. This platform supports robust analytics and reporting for retail business insights, built using big data technologies like **HDFS, Spark, Kafka, and Hive**.
 
-### Scope
-- Ingest batch data files (branches, sales agents, sales transactions) into a data lake.
-- Process and transform raw data into structured Hive tables.
-- Implement a streaming data pipeline to process app logs from Kafka.
-- Develop business-specific data models and reports.
-- Ensure data security, compliance, and performance optimization.
-- Provide documentation, maintenance, and support.
+---
 
-# Architecture and Design
+## 🔍 Overview
 
-### Components
-1. **Data Ingestion Layer:** Collects data from batch files and real-time streams from Kafka.
-2. **Data Lake:** Centralized repository for raw and processed data (HDFS).
-3. **Data Processing Layer:** Utilizes Spark for data transformation, cleaning, and loading.
-4. **Data Warehouse (DWH):** Built using Hive tables for business intelligence and reporting.
-5. **Data Access and Analytics Layer:** Tools for data analysts, data scientists, and business users.
+The Q Company Data Platform enables scalable data handling from various sources including CSV files and real‑time events. It implements a hybrid pipeline that ingests data, performs transformations, and loads it into a data warehouse for business intelligence.
 
-## Data Flow
-### Data Sources:
-- Batch Files: Branches, sales agents, and sales transactions files.
-- Real-Time Streams: App logs pushed to Kafka cluster.
+---
 
-### Processing Flow:
-- Batch files are ingested into HDFS every hour.
-- Real-time data from Kafka is processed and stored in HDFS.
-- Raw data in HDFS is processed using Spark.
-- Processed data is stored as Hive tables in the data warehouse.
-- Data analysts and business users access the DWH for insights and reporting.
+## 📌 Primary Objectives
 
-### Data Storage
-- **Data Lake:** Uses HDFS for raw and processed data.
-- **Data Warehouse:** Built using Hive for structured storage and complex queries.
+1. Build data ingestion pipelines for **batch files** and **real‑time Kafka streams**.  
+2. Create a scalable **data lake** architecture using HDFS.  
+3. Implement **Spark** workflows for data transformation.  
+4. Establish a **Hive data warehouse** for structured analytics.  
+5. Enable business users to derive actionable insights through reporting.  
+6. Ensure data quality, performance, and maintainability.
 
-# Tools and Technologies
-- **HDFS:** Scalable data storage.
-- **Apache Spark:** Data processing, transformation, and analysis.
-- **Apache Hive:** Data warehousing and SQL-based querying.
-- **Apache Kafka:** Real-time data streaming.
-- **Python:** Scripting and automation.
+---
 
-# Data Ingestion Pipeline
+## 🧠 Architecture
 
-### Batch Data Ingestion
-- Files are ingested into the data lake hourly as raw files.
-- Data is partitioned for efficient storage and retrieval.
+### Main Components
 
-### Streaming Data Ingestion
-- Kafka producer sends app logs to Kafka.
-- Spark streaming job reads, processes, and stores data in HDFS.
+- **Data Ingestion Layer:** Collects batch and stream data.  
+- **Data Lake (HDFS):** Central storage for raw and validated datasets.  
+- **Processing Layer:** Uses Spark for ETL (cleaning, transformations, etc.).  
+- **Data Warehouse (Hive):** Stores structured and query‑ready datasets.  
+- **Analytics Layer:** Enables BI tools and analysts to query data.
 
-### Data Formats and Protocols
-- **Batch Files:** CSV or JSON formats.
-- **Real-Time Streams:** JSON format.
+---
 
+## 🔄 Data Flow
 
-# Handling Small Files Problem
-- Implement a compaction strategy using PySpark.
-- Combine small CSV files into a single DataFrame.
-- Write merged data back as a single file to optimize performance.
+1. **Batch Sources:** CSV files (e.g., sales, branches, agents) arrive in the landing zone.  
+2. **Streaming:** App logs and events ingested via Kafka.  
+3. **Raw Storage:** Files are loaded to HDFS raw layer with date/hour partitions.  
+4. **Transform:** Spark jobs normalize, enrich, and organize data.  
+5. **Warehouse:** Transformed tables are stored in Hive for analysis.  
+6. **Analytics:** BI tools and dashboards consume Hive tables.
+
+---
+
+## 🧰 Tools & Technologies
+
+| Layer | Technology |
+|-------|------------|
+| Storage | HDFS |
+| Batch Processing | Apache Spark |
+| Warehouse | Apache Hive |
+| Streaming | Apache Kafka |
+| Orchestration | Python automation scripts |
+| Data Formats | CSV, ORC |
+
+---
+
+## 🛠 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Marwamedha/RetailDataHub-Bigdata-.git
+cd RetailDataHub-Bigdata-
+
